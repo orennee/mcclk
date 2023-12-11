@@ -18,7 +18,7 @@ The code has been tested running under Python 3.7.9. The required packages are a
 - networkx == 2.5
 
 ## Usage
-The hyper-parameter search range and optimal settings have been clearly stated in the codes (see the parser function in utils/parser.py).
+The hyperparameter search range and optimal settings have been clearly stated in the codes (see the parser function in utils/parser.py).
 * Train and Test
 
 ```

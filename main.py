@@ -13,7 +13,7 @@ from utils.data_loader import load_data
 from modules.MCCLK import Recommender
 from utils.evaluate import test
 from utils.helper import early_stopping
-from tqdm import tqdmtrange
+from tqdm import tqdm, trange
 
 import logging
 n_users = 0
@@ -203,7 +203,7 @@ if __name__ == '__main__':
         """training"""
         loss, s, cor_loss = 0, 0, 0
         train_s_t = time()
-        tbar = tqdm(unit="batch", total=len(train_cf)
+        tbar = tqdm(unit="batch", total=len(train_cf), desc='Epoch {}/{}'.format(epoch + 1, args.epoch))
         while s + args.batch_size <= len(train_cf):
             batch = get_feed_dict(train_cf, s, s + args.batch_size)
             batch_loss, _, _, _ = model(batch)
@@ -215,6 +215,8 @@ if __name__ == '__main__':
             loss += batch_loss
             # cor_loss += batch_cor
             s += args.batch_size
+            tbar.update(args.batch_size)
+            tbar.set_postfix_str("loss: {:.4f}".format(loss))
 
         train_e_t = time()
         # tsne_plot(model.all_embed, epoch)
