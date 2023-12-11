@@ -3,7 +3,7 @@ import argparse
 def parse_args():
     parser = argparse.ArgumentParser(description="MCCLK")
     # ===== dataset ===== #
-    parser.add_argument("--dataset", nargs="?", default="music", help="Choose a dataset:[last-fm,amazon-book,alibaba, book, music, movie]")
+    parser.add_argument("--dataset", nargs="?", default="book", help="Choose a dataset:[last-fm,amazon-book,alibaba, book, music, movie]")
     parser.add_argument("--data_path", nargs="?", default="data/", help="Input data path.")
 
     # ===== train ===== #

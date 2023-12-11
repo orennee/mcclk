@@ -163,7 +163,7 @@ if __name__ == '__main__':
     global args, device
     args = parse_args()
     args.cuda = args.cuda and torch.cuda.is_available()
-    device = torch.device("cuda:"+str(args.gpu_id)) if args.cuda else torch.device("cpu")
+    device = torch.device("gpu:0") if torch.cuda.is_available() else torch.device("cpu")
 
     """build dataset"""
     train_cf, test_cf, user_dict, n_params, graph, mat_list = load_data(args)
