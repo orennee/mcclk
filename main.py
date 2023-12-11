@@ -203,7 +203,7 @@ if __name__ == '__main__':
         """training"""
         loss, s, cor_loss = 0, 0, 0
         train_s_t = time()
-        tbar = tqdm(unit="batch", total=len(train_cf), desc='Epoch {}/{}'.format(epoch + 1, args.epoch))
+        tbar = tqdm(unit="item", total=len(train_cf), desc='Epoch {}/{}'.format(epoch + 1, args.epoch))
         while s + args.batch_size <= len(train_cf):
             batch = get_feed_dict(train_cf, s, s + args.batch_size)
             batch_loss, _, _, _ = model(batch)
