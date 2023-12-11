@@ -13,7 +13,7 @@ from utils.data_loader import load_data
 from modules.MCCLK import Recommender
 from utils.evaluate import test
 from utils.helper import early_stopping
-from tqdm import trange
+from tqdm import tqdmtrange
 
 import logging
 n_users = 0
@@ -193,7 +193,7 @@ if __name__ == '__main__':
     should_stop = False
 
     print("start training ...")
-    for epoch in trange(args.epoch):
+    for epoch in range(args.epoch):
         """training CF"""
         # shuffle training data
         index = np.arange(len(train_cf))
@@ -203,6 +203,7 @@ if __name__ == '__main__':
         """training"""
         loss, s, cor_loss = 0, 0, 0
         train_s_t = time()
+        tbar = tqdm(unit="batch", total=len(train_cf)
         while s + args.batch_size <= len(train_cf):
             batch = get_feed_dict(train_cf, s, s + args.batch_size)
             batch_loss, _, _, _ = model(batch)
