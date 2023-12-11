@@ -54,8 +54,8 @@ class GraphConv(nn.Module):
     Graph Convolutional Network
     """
     def __init__(self, channel, n_hops, n_users,
-                  n_relations, interact_mat,
-                 ind, node_dropout_rate=0.5, mess_dropout_rate=0.1):
+                  n_relations, interact_mat, device,
+                 ind, node_dropout_rate=0.5, mess_dropout_rate=0.1, ):
         super(GraphConv, self).__init__()
 
         self.convs = nn.ModuleList()
@@ -68,7 +68,7 @@ class GraphConv(nn.Module):
         self.topk = 10
         self.lambda_coeff = 0.5
         self.temperature = 0.2
-        self.device = torch.device("cuda:" + str(0))
+        self.device = device
         initializer = nn.init.xavier_uniform_
         weight = initializer(torch.empty(n_relations - 1, channel))
         self.weight = nn.Parameter(weight)  # [n_relations - 1, in_channel]
@@ -168,7 +168,7 @@ class GraphConv(nn.Module):
 
 
 class Recommender(nn.Module):
-    def __init__(self, data_config, args_config, graph, adj_mat):
+    def __init__(self, data_config, args_config, graph, adj_mat, device):
         super(Recommender, self).__init__()
 
         self.n_users = data_config['n_users']
@@ -186,8 +186,7 @@ class Recommender(nn.Module):
         self.mess_dropout = args_config.mess_dropout
         self.mess_dropout_rate = args_config.mess_dropout_rate
         self.ind = args_config.ind
-        self.device = torch.device("cuda:" + str(args_config.gpu_id)) if args_config.cuda \
-                                                                      else torch.device("cpu")
+        self.device = device
 
         self.adj_mat = adj_mat
         self.graph = graph
@@ -225,6 +224,7 @@ class Recommender(nn.Module):
                          n_users=self.n_users,
                          n_relations=self.n_relations,
                          interact_mat=self.interact_mat,
+                         device=self.device,
                          ind=self.ind,
                          node_dropout_rate=self.node_dropout_rate,
                          mess_dropout_rate=self.mess_dropout_rate)

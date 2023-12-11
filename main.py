@@ -13,6 +13,7 @@ from utils.data_loader import load_data
 from modules.MCCLK import Recommender
 from utils.evaluate import test
 from utils.helper import early_stopping
+from tqdm import trange
 
 import logging
 n_users = 0
@@ -161,6 +162,7 @@ if __name__ == '__main__':
     """read args"""
     global args, device
     args = parse_args()
+    args.cuda = args.cuda and torch.cuda.is_available()
     device = torch.device("cuda:"+str(args.gpu_id)) if args.cuda else torch.device("cpu")
 
     """build dataset"""
@@ -181,7 +183,7 @@ if __name__ == '__main__':
     test_cf_pairs = torch.LongTensor(np.array([[cf[0], cf[1], cf[2]] for cf in test_cf], np.int32))
 
     """define model"""
-    model = Recommender(n_params, args, graph, mean_mat_list[0]).to(device)
+    model = Recommender(n_params, args, graph, mean_mat_list[0], device).to(device)
 
     """define optimizer"""
     optimizer = torch.optim.Adam(model.parameters(), lr=args.lr)
@@ -191,7 +193,7 @@ if __name__ == '__main__':
     should_stop = False
 
     print("start training ...")
-    for epoch in range(args.epoch):
+    for epoch in trange(args.epoch):
         """training CF"""
         # shuffle training data
         index = np.arange(len(train_cf))
